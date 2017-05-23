@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using mainplayer.views;
+using mainplayer.controllers;
 
 namespace mainplayer.models
 {
@@ -35,9 +36,9 @@ namespace mainplayer.models
 		}
 
 		// Use this for initialization
-		void Start () 
+		public void Init () 
 		{
-			Scenario scenario = new Scenario (ManagerView.Instance.Root,"replace the under the hood thingy");
+			Scenario scenario = new Scenario (SceneController.Instance.Main_object ,"replace the under the hood thingy");
 			Part part = new Part ("26-rvECR", "take out bolt");
 			List<Instruction> instructions = new List<Instruction> ();
 

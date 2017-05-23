@@ -9,7 +9,7 @@ namespace mainplayer.views
 
 		static ManagerView			    m_instance;
 
-		[SerializeField]GameObject m_root;
+
 		[SerializeField]GameObject m_camera;
 
 
@@ -36,11 +36,6 @@ namespace mainplayer.views
 			
 		}
 
-		public GameObject Root {
-			get {
-				return m_root;
-			}
-		}
 
 		public GameObject Camera {
 			get {

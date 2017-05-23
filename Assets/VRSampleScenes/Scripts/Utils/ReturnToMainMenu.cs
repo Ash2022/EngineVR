@@ -14,13 +14,13 @@ namespace VRStandardAssets.Utils
 
         private void OnEnable ()
         {
-            m_VRInput.OnCancel += HandleCancel;
+           // m_VRInput.OnCancel += HandleCancel;
         }
 
 
         private void OnDisable ()
         {
-            m_VRInput.OnCancel -= HandleCancel;
+           // m_VRInput.OnCancel -= HandleCancel;
         }
 
 

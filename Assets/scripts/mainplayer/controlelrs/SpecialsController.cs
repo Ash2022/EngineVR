@@ -109,7 +109,7 @@ namespace mainplayer.controllers
 
 			List<GameObject> list = new List<GameObject> ();
 
-			Transform root_transform = ManagerView.Instance.Root.transform;
+			Transform root_transform = SceneController.Instance.Main_object.transform;
 
 			for (int i = 0; i < root_transform.childCount; i++)
 			{

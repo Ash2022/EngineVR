@@ -12,6 +12,11 @@ namespace mainplayer.controllers
 	public class SceneController : MonoBehaviour {
 
 
+
+		[SerializeField]GameObject			m_main_object_prefab=null;
+
+		GameObject							m_main_object=null;
+
 		//[SerializeField]List<Material>		m_scene_materials = new List<Material> ();
 		[SerializeField]PartDisplayView		m_display;
 		List<GameObject> 					m_scene_objects = new List<GameObject> ();
@@ -21,7 +26,7 @@ namespace mainplayer.controllers
 
 		float 								m_scale_factor=0.01f;
 		float 								m_rotate_factor=0.5f;
-
+		VRInput								m_vrinput=null;
 			
 
 		[SerializeField]SelectionSlider			m_play_button;
@@ -49,7 +54,14 @@ namespace mainplayer.controllers
 
 		void Start()
 		{
+			CreateMainObjectAndResetStage ();
+			ModelManager.Instance.Init ();
 			ValidateSceneObjects ();
+
+			m_vrinput = GetComponent<VRInput> ();
+
+			m_vrinput.OnCancel += CreateMainObjectAndResetStage;
+
 			m_play_button.OnBarFilled += PlayScenarioClicked;
 			m_auto_play_button.OnBarFilled += AutoPlayClicked;
 			m_explode_button.OnBarFilled += ExplodeClicked;
@@ -57,6 +69,21 @@ namespace mainplayer.controllers
 			m_sclae_button.OnBarFilled += ScaleClicked;
 			m_path_button.OnBarFilled += PathClicked;
 			m_show_me_button.OnBarFilled += ShowMeClicked;
+
+		}
+
+		private void CreateMainObjectAndResetStage()
+		{
+			m_stage.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 90f, 0);
+		
+		//	if (m_main_object != null)
+			//	Destroy (m_main_object);
+
+			m_main_object = (GameObject)Instantiate (m_main_object_prefab);
+			m_main_object.transform.SetParent (m_stage);
+			m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0.09f, 0f);
+			m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
+			m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
 
 
 
@@ -87,9 +114,9 @@ namespace mainplayer.controllers
 
 			float adder = dir * m_scale_factor;
 
-			Vector3 curr = ManagerView.Instance.Root.GetComponent<Transform> ().localScale;
+			Vector3 curr = m_main_object.GetComponent<Transform> ().localScale;
 
-			ManagerView.Instance.Root.GetComponent<Transform> ().localScale = new Vector3 (curr.x+adder, curr.y+adder, curr.z+adder);
+			m_main_object.GetComponent<Transform> ().localScale = new Vector3 (curr.x+adder, curr.y+adder, curr.z+adder);
 
 		}
 
@@ -141,7 +168,7 @@ namespace mainplayer.controllers
 
 		public void FlipScale()
 		{
-			ManagerView.Instance.Root.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
+			m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
 		}
 			
 
@@ -203,7 +230,7 @@ namespace mainplayer.controllers
 
 		private void ValidateSceneObjects()
 		{
-			Transform root_transform = ManagerView.Instance.Root.transform;
+			Transform root_transform = m_main_object.transform;
 
 			for (int i = 0; i < root_transform.childCount; i++)
 			{
@@ -244,5 +271,10 @@ namespace mainplayer.controllers
 		}
 
 
+		public GameObject Main_object {
+			get {
+				return m_main_object;
+			}
+		}
 	}
 }

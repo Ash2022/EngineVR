@@ -111,7 +111,8 @@ namespace VRStandardAssets.Utils
             // If the Cancel button is pressed and there are subscribers to OnCancel call it.
             if (Input.GetButtonDown("Cancel"))
             {
-                if (OnCancel != null)
+				Debug.Log ("Cancel");
+               if (OnCancel != null)
                     OnCancel();
             }
         }
