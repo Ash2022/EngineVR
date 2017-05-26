@@ -148,7 +148,7 @@ namespace mainplayer.controllers
 				m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
 				m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
 			} else if (m_active_object_index == 1) {
-				m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0f, 0f);
+				m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (1.5f, 0.07f, -0.5f);
 				m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
 				m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
 			}
