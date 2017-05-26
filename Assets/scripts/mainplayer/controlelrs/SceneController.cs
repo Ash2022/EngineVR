@@ -37,6 +37,15 @@ namespace mainplayer.controllers
 		[SerializeField]SelectionSlider			m_path_button=null;
 		[SerializeField]SelectionSlider			m_show_me_button=null;
 
+		[SerializeField]SelectionSlider			m_pick_scenario_1=null;
+		[SerializeField]SelectionSlider			m_pick_scenario_2=null;
+
+
+		[SerializeField]GameObject				m_main_menu=null;
+		[SerializeField]GameObject				m_scene_menu=null;
+		[SerializeField]GameObject				m_display_menu=null;
+
+
 		[SerializeField]PartDisplayView			m_part_display_view=null;
 
 		public static SceneController Instance
@@ -64,13 +73,13 @@ namespace mainplayer.controllers
 			ScenarioController.Instance.Reset ();
 			m_part_display_view.Reset ();
 
-			SelectScenario (0);
+
 		}
 
 		void Start()
 		{
 			m_vrinput = GetComponent<VRInput> ();
-			m_vrinput.OnCancel += Reset;
+			m_vrinput.OnCancel += ShowMainMenu;
 			m_play_button.OnBarFilled += PlayScenarioClicked;
 			m_auto_play_button.OnBarFilled += AutoPlayClicked;
 			m_explode_button.OnBarFilled += ExplodeClicked;
@@ -79,11 +88,45 @@ namespace mainplayer.controllers
 			m_path_button.OnBarFilled += PathClicked;
 			m_show_me_button.OnBarFilled += ShowMeClicked;
 
-			Reset ();
+			m_pick_scenario_1.OnBarFilled += Scenario1Selected;
+			m_pick_scenario_2.OnBarFilled += Scenario2Selected;
+
+			ShowMainMenu ();
 
 
 
 		}
+
+		private void Scenario1Selected()
+		{
+			m_active_object_index =0;
+			ScenarioPicked ();
+		}
+
+		private void Scenario2Selected()
+		{
+			m_active_object_index =1;
+			ScenarioPicked ();
+		}
+
+		private void ScenarioPicked()
+		{
+			m_main_menu.SetActive (false);
+			m_display_menu.SetActive (true);
+			m_scene_menu.SetActive (true);
+
+			SelectScenario (m_active_object_index);
+		}
+
+		public void ShowMainMenu()
+		{
+			m_main_menu.SetActive (true);
+			m_display_menu.SetActive (false);
+			m_scene_menu.SetActive (false);
+			Reset ();
+		}
+
+
 
 		public void SelectScenario(int index)
 		{
@@ -99,9 +142,17 @@ namespace mainplayer.controllers
 
 			m_main_object = (GameObject)Instantiate (m_objects_prefab[m_active_object_index]);
 			m_main_object.transform.SetParent (m_stage);
-			m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0.09f, 0f);
-			m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
-			m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
+
+			if (m_active_object_index == 0) {
+				m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0.09f, 0f);
+				m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
+				m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
+			} else if (m_active_object_index == 1) {
+				m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0f, 0f);
+				m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
+				m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
+			}
+
 
 		}
 
@@ -193,13 +244,15 @@ namespace mainplayer.controllers
 		{
 			for (int i = 0; i < m_scene_objects.Count; i++) 
 			{
-				Material[] mats = m_scene_objects [i].GetComponent<MeshRenderer> ().materials;
+				if (m_scene_objects [i].GetComponent<MeshRenderer> () != null) {
 
-				for (int j = 0; j < mats.Length; j++) {
+					Material[] mats = m_scene_objects [i].GetComponent<MeshRenderer> ().materials;
 
-					SetMaterialToTransparent (mats [j],trans);
+					for (int j = 0; j < mats.Length; j++) {
+
+						SetMaterialToTransparent (mats [j], trans);
+					}
 				}
-
 			}
 		}
 
