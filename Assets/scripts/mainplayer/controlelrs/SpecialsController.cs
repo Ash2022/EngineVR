@@ -56,6 +56,12 @@ namespace mainplayer.controllers
 			}
 		}
 
+		public void ResetToggles()
+		{
+			m_org_path_colors.Clear ();
+			m_show_path = false;
+			m_exploded = false;
+		}
 
 
 		public void TogglePath()

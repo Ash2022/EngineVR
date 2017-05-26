@@ -28,7 +28,6 @@ namespace mainplayer.controllers
 		int										m_curr_part_index=0;
 		int										m_curr_instruction_index=0;
 
-		bool									m_scenraio_ready=false;
 
 		static ScenarioController			    m_instance;
 
@@ -47,9 +46,17 @@ namespace mainplayer.controllers
 			}
 		}
 
+		public void Reset()
+		{
+			StopAllCoroutines ();
+			m_active_scenario_parts.Clear ();
+			m_curr_part_index = 0;
+		}
 
 		private void PrepareScenario(Scenario scenario,bool auto)
 		{
+
+
 			//loop over the scene from the root 
 			//for each part - need to put a partview on that part
 
@@ -73,8 +80,6 @@ namespace mainplayer.controllers
 
 			}
 		
-			m_scenraio_ready = true;
-
 			if (auto)
 				StartCoroutine(RunScenario1 ());
 			else
@@ -90,8 +95,6 @@ namespace mainplayer.controllers
 			for (int i = 0; i < m_active_scenario_parts.Count; i++) 
 			{
 				PartView part = m_active_scenario_parts [i];
-
-
 
 				part.SetMaterial (m_High_Light_Mat);
 
@@ -127,10 +130,10 @@ namespace mainplayer.controllers
 
 		public void RunStepScenario()
 		{
-			SceneController.Instance.Display.UpdateInstText (-1);
+			SceneController.Instance.PartDisplayView.UpdateInstText (-1);
 			PlayAudio (m_active_scenario_parts [m_curr_part_index].Clip);
 			m_active_scenario_parts [m_curr_part_index].WaitForClick (NextPartClicked);
-			SceneController.Instance.Display.SetModel (m_active_scenario_parts [m_curr_part_index].Part_model,HelpRequested);
+			SceneController.Instance.PartDisplayView.SetModel (m_active_scenario_parts [m_curr_part_index].Part_model,HelpRequested);
 		}
 
 		public void HelpRequested()
@@ -164,7 +167,7 @@ namespace mainplayer.controllers
 
 				Debug.Log (part_model.Description);
 
-				SceneController.Instance.Display.UpdateInstText (j);
+				SceneController.Instance.PartDisplayView.UpdateInstText (j);
 				DoInstruction (part_model.GetInstruction (j),part_view.Object,part_model.Id);
 
 				while (!m_inst_done)
@@ -296,11 +299,7 @@ namespace mainplayer.controllers
 			}
 		}
 
-		public bool Scenraio_ready {
-			get {
-				return m_scenraio_ready;
-			}
-		}
+	
 
 		public Material Over_mat {
 			get {

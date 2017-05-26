@@ -30,6 +30,31 @@ namespace mainplayer.views
 
 		private VRInteractiveItem 		m_InteractiveItem;  
 
+		public void Reset()
+		{
+			m_currently_showing = 0;
+
+			m_InteractiveItem = GetComponent<VRInteractiveItem>();
+
+			if (m_InteractiveItem != null) {
+
+				m_InteractiveItem.OnDown -= PartClicked;
+				m_InteractiveItem.OnOver -= LookingAtPart;
+				m_InteractiveItem.OnOut -= StopLookingAtPart;
+			}
+
+			if (m_dup_object != null)
+				Destroy (m_dup_object);
+
+			m_part_description.text = "Post Reset";
+			m_inst_description.text = "Post Reset";
+
+			m_help_requested_delegate = null;
+
+			m_part_model = null;
+
+		}
+
 		public void LinkInteractive()
 		{
 			m_InteractiveItem = GetComponent<VRInteractiveItem>();
@@ -60,6 +85,8 @@ namespace mainplayer.views
 
 		public void SetModel(Part part,HelpRequstedDelegate help_requested)
 		{
+			Debug.Log ("Setting model");
+
 			m_currently_showing = 0;
 
 			m_help_requested_delegate = help_requested;
@@ -135,15 +162,16 @@ namespace mainplayer.views
 			Vector3 origin = main_cam.WorldToScreenPoint (new Vector3 (obj_bounds.min.x, obj_bounds.max.y,obj_bounds.center.z));
 			Vector3 extent = main_cam.WorldToScreenPoint (new Vector3 (obj_bounds.max.x, obj_bounds.min.y,obj_bounds.center.z));
 
+			/*
 			Debug.Log (obj_bounds.extents.x*500f);
 			Debug.Log (obj_bounds.extents.y*500f);
 			Debug.Log (obj_bounds.extents.z*500f);
 
 			Debug.Log (origin);
 			Debug.Log (extent);
-
+*/
 			Vector3 temp = new Vector3(obj_bounds.max.x-obj_bounds.min.x,obj_bounds.max.y - obj_bounds.min.y,0);
-
+			/*
 			Debug.Log (main_cam.WorldToViewportPoint (origin));
 			Debug.Log (main_cam.WorldToViewportPoint (extent));
 
@@ -155,7 +183,7 @@ namespace mainplayer.views
 
 			Debug.Log (main_cam.ScreenToViewportPoint (origin));
 			Debug.Log (main_cam.ScreenToViewportPoint(extent));
-
+*/
 
 
 			//rect.anchorMin = new Vector2 (0, 0);

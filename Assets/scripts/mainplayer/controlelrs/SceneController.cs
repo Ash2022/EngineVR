@@ -13,12 +13,11 @@ namespace mainplayer.controllers
 
 
 
-		[SerializeField]GameObject			m_main_object_prefab=null;
+		[SerializeField]List<GameObject>	m_objects_prefab=null;
 
 		GameObject							m_main_object=null;
 
 		//[SerializeField]List<Material>		m_scene_materials = new List<Material> ();
-		[SerializeField]PartDisplayView		m_display;
 		List<GameObject> 					m_scene_objects = new List<GameObject> ();
 		[SerializeField]Transform			m_stage=null;
 		static SceneController			    m_instance;
@@ -28,16 +27,17 @@ namespace mainplayer.controllers
 		float 								m_rotate_factor=0.5f;
 		VRInput								m_vrinput=null;
 			
+		int									m_active_object_index=0;
 
-		[SerializeField]SelectionSlider			m_play_button;
-		[SerializeField]SelectionSlider			m_auto_play_button;
-		[SerializeField]SelectionSlider			m_explode_button;
-		[SerializeField]SelectionSlider			m_blend_button;
-		[SerializeField]SelectionSlider			m_sclae_button;
-		[SerializeField]SelectionSlider			m_path_button;
-		[SerializeField]SelectionSlider			m_show_me_button;
+		[SerializeField]SelectionSlider			m_play_button=null;
+		[SerializeField]SelectionSlider			m_auto_play_button=null;
+		[SerializeField]SelectionSlider			m_explode_button=null;
+		[SerializeField]SelectionSlider			m_blend_button=null;
+		[SerializeField]SelectionSlider			m_sclae_button=null;
+		[SerializeField]SelectionSlider			m_path_button=null;
+		[SerializeField]SelectionSlider			m_show_me_button=null;
 
-		[SerializeField]PartDisplayView			m_part_display;
+		[SerializeField]PartDisplayView			m_part_display_view=null;
 
 		public static SceneController Instance
 		{
@@ -52,16 +52,25 @@ namespace mainplayer.controllers
 			}
 		}
 
+
+		void Reset()
+		{
+			m_stage.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 90f, 0);
+			if (m_main_object != null) {
+				Destroy (m_main_object);
+			}
+
+			SpecialsController.Instance.ResetToggles ();
+			ScenarioController.Instance.Reset ();
+			m_part_display_view.Reset ();
+
+			SelectScenario (0);
+		}
+
 		void Start()
 		{
-			CreateMainObjectAndResetStage ();
-			ModelManager.Instance.Init ();
-			ValidateSceneObjects ();
-
 			m_vrinput = GetComponent<VRInput> ();
-
-			m_vrinput.OnCancel += CreateMainObjectAndResetStage;
-
+			m_vrinput.OnCancel += Reset;
 			m_play_button.OnBarFilled += PlayScenarioClicked;
 			m_auto_play_button.OnBarFilled += AutoPlayClicked;
 			m_explode_button.OnBarFilled += ExplodeClicked;
@@ -70,22 +79,29 @@ namespace mainplayer.controllers
 			m_path_button.OnBarFilled += PathClicked;
 			m_show_me_button.OnBarFilled += ShowMeClicked;
 
+			Reset ();
+
+
+
 		}
 
-		private void CreateMainObjectAndResetStage()
+		public void SelectScenario(int index)
 		{
-			m_stage.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 90f, 0);
-		
-		//	if (m_main_object != null)
-			//	Destroy (m_main_object);
+			m_active_object_index = index;
+			CreateMainObject ();
+			ModelManager.Instance.readScenario (m_active_object_index);
+			ValidateSceneObjects ();
+		}
 
-			m_main_object = (GameObject)Instantiate (m_main_object_prefab);
+		private void CreateMainObject()
+		{
+			Debug.Log ("Create Main Object>>>");
+
+			m_main_object = (GameObject)Instantiate (m_objects_prefab[m_active_object_index]);
 			m_main_object.transform.SetParent (m_stage);
 			m_main_object.GetComponent<Transform> ().localPosition = new Vector3 (0f, 0.09f, 0f);
 			m_main_object.GetComponent<Transform> ().localScale = new Vector3 (1f, 1f, 1f);
 			m_main_object.GetComponent<Transform> ().localEulerAngles = new Vector3 (0f, 0f, 0f);
-
-
 
 		}
 
@@ -153,7 +169,7 @@ namespace mainplayer.controllers
 
 		private void ShowMeClicked()
 		{
-			m_part_display.PartDisplayClicked ();
+			m_part_display_view.PartDisplayClicked ();
 		}
 
 		public void FlipAllMaterialsBlend()
@@ -230,6 +246,7 @@ namespace mainplayer.controllers
 
 		private void ValidateSceneObjects()
 		{
+			m_scene_objects.Clear ();
 			Transform root_transform = m_main_object.transform;
 
 			for (int i = 0; i < root_transform.childCount; i++)
@@ -261,12 +278,12 @@ namespace mainplayer.controllers
 			}
 		}
 
-		public PartDisplayView Display {
+		public PartDisplayView PartDisplayView {
 			get {
-				return m_display;
+				return m_part_display_view;
 			}
 			set {
-				m_display = value;
+				m_part_display_view = value;
 			}
 		}
 
