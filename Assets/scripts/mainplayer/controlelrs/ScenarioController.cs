@@ -94,13 +94,18 @@ namespace mainplayer.controllers
 
 			for (int i = 0; i < m_active_scenario_parts.Count; i++) 
 			{
-				PartView part = m_active_scenario_parts [i];
+				PartView part_view = m_active_scenario_parts [i];
 
-				part.SetMaterial (m_High_Light_Mat);
+				part_view.SetMaterial (m_High_Light_Mat);
 
 				yield return new WaitForSeconds(DELAY_BETWEEN_INST);
 
-				Part	part_model = part.Part_model;
+				Part	part_model = part_view.Part_model;
+
+
+				SceneController.Instance.PartDisplayView.UpdateInstText (-1);
+				PlayAudio (part_view.Clip);
+				SceneController.Instance.PartDisplayView.SetModel (part_model,null);
 
 				for (int j = 0; j < part_model.GetAllInstruction ().Count; j++)
 				{
@@ -108,7 +113,7 @@ namespace mainplayer.controllers
 
 					Debug.Log (part_model.Description);
 
-					DoInstruction (part_model.GetInstruction (j),part.Object,part_model.Id);
+					DoInstruction (part_model.GetInstruction (j),part_view.Object,part_model.Id);
 					while (!m_inst_done)
 					{
 						yield return new WaitForSeconds (0.5f);
@@ -117,7 +122,7 @@ namespace mainplayer.controllers
 					yield return new WaitForSeconds (DELAY_BETWEEN_INST);
 				}
 
-				part.SetDefaultMaterial ();
+				part_view.SetDefaultMaterial ();
 
 			}
 
