@@ -140,8 +140,8 @@ namespace mainplayer.models
 			} 
 			else if (index == 1) //CAR
 			{
-				Scenario scenario = new Scenario (SceneController.Instance.Main_object, "Open the car hood");
-				Part part = new Part ("NONE-DC_Shell 23", "Pull glass upwards");
+				Scenario scenario = new Scenario (SceneController.Instance.Main_object, "Lets look under the hood - view the car from the back ");
+				Part part = new Part ("NONE-DC_Shell 23", "Pull the left glass cover upwards");
 				List<Instruction> instructions = new List<Instruction> ();
 
 				instructions.Add (new Instruction (InstructionType.move_z, 2f));
@@ -150,7 +150,7 @@ namespace mainplayer.models
 
 				scenario.AddPart (part);
 
-				Part part2 = new Part ("NONE-DC_Shell 22", "Pull glass upwards");
+				Part part2 = new Part ("NONE-DC_Shell 22", "Pull the right glass cover upwards");
 				List<Instruction> instructions2 = new List<Instruction> ();
 
 				instructions2.Add (new Instruction (InstructionType.move_z, 2f));
@@ -160,7 +160,7 @@ namespace mainplayer.models
 				scenario.AddPart (part2);
 
 
-				Part part3 = new Part ("NONE-DC_Shell 538", "Pull Glass Rim upwards");
+				Part part3 = new Part ("NONE-DC_Shell 538", "Pull The left Glass Rim upwards");
 				List<Instruction> instructions3 = new List<Instruction> ();
 
 				instructions3.Add (new Instruction (InstructionType.move_z, 2f));
@@ -169,7 +169,7 @@ namespace mainplayer.models
 
 				scenario.AddPart (part3);
 
-				Part part4 = new Part ("NONE-DC_Shell 46", "Pull Glass Rim upwards ");
+				Part part4 = new Part ("NONE-DC_Shell 46", "Pull The right Glass Rim upwards ");
 				List<Instruction> instructions4 = new List<Instruction> ();
 
 				instructions4.Add (new Instruction (InstructionType.move_z, 2f));
@@ -177,7 +177,7 @@ namespace mainplayer.models
 				part4.SetAllInstructions (instructions4);
 				scenario.AddPart (part4);
 
-				Part part5 = new Part ("NONE-DC_Shell 12", "Pull cover to expose hood ");
+				Part part5 = new Part ("NONE-DC_Shell 12", "Remove the engine cover by sliding it backwards to expose hood ");
 				List<Instruction> instructions5 = new List<Instruction> ();
 
 				instructions5.Add (new Instruction (InstructionType.move_y, 3f));
@@ -185,6 +185,67 @@ namespace mainplayer.models
 				part5.SetAllInstructions (instructions5);
 				scenario.AddPart (part5);
 
+				Part part6 = new Part ("NONE-DC_Shell 454", "Disassemble and pull the Engine front air tube");
+				List<Instruction> instructions6 = new List<Instruction> ();
+
+				instructions6.Add (new Instruction (InstructionType.move_y, 3f));
+
+				part6.SetAllInstructions (instructions6);
+				scenario.AddPart (part6);
+
+
+				Part part7 = new Part ("NONE-DC_Shell 455", "Disassemble and pull the Engine rear air tube");
+				List<Instruction> instructions7 = new List<Instruction> ();
+
+				instructions7.Add (new Instruction (InstructionType.move_y, 3f));
+
+				part7.SetAllInstructions (instructions7);
+				scenario.AddPart (part7);
+
+
+				Part part8 = new Part ("NONE-DC_Shell 378", "Remove the right air filter cap");
+				List<Instruction> instructions8 = new List<Instruction> ();
+
+				instructions8.Add (new Instruction (InstructionType.move_y, 5f));
+
+				part8.SetAllInstructions (instructions8);
+				scenario.AddPart (part8);
+
+				Part part9 = new Part ("NONE-DC_Shell 381", "Remove the left air filter cap");
+				List<Instruction> instructions9 = new List<Instruction> ();
+
+				instructions9.Add (new Instruction (InstructionType.move_y, 5f));
+
+				part9.SetAllInstructions (instructions9);
+				scenario.AddPart (part9);
+
+
+				Part part10 = new Part ("NONE-DC_Shell 377", "Rotate and pull the right air filter head");
+				List<Instruction> instructions10 = new List<Instruction> ();
+
+				instructions10.Add (new Instruction (InstructionType.rotate, 180f));
+				instructions10.Add (new Instruction (InstructionType.move_y, 5f));
+
+				part10.SetAllInstructions (instructions10);
+				scenario.AddPart (part10);
+
+				Part part11 = new Part ("NONE-DC_Shell 380", "Rotate and pull the left air filter head");
+				List<Instruction> instructions11 = new List<Instruction> ();
+
+				instructions11.Add (new Instruction (InstructionType.rotate, 180f));
+				instructions11.Add (new Instruction (InstructionType.move_y, 5f));
+
+				part11.SetAllInstructions (instructions11);
+				scenario.AddPart (part11);
+
+				Part part12 = new Part ("NONE-DC_Shell 573", "The End and head");
+				List<Instruction> instructions12 = new List<Instruction> ();
+
+			
+				instructions12.Add (new Instruction (InstructionType.move_y, 0f));
+
+				part12.SetAllInstructions (instructions12);
+				scenario.AddPart (part12);
 
 				m_scenarios.Add ("Scenario1", scenario);
 			}
